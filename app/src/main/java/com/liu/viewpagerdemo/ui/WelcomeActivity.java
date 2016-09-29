@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 
 import com.liu.viewpagerdemo.R;
 import com.liu.viewpagerdemo.WelcomeViewpagerAdapter;
+import com.liu.viewpagerdemo.view.DepthPageTransformer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +72,8 @@ public class WelcomeActivity extends AppCompatActivity {
     private void initViewPager() {
         mWelcomeViewpagerAdapter = new WelcomeViewpagerAdapter(this,mDatas);
         mViewPager.setAdapter(mWelcomeViewpagerAdapter);
-
+        mViewPager.setPageTransformer(true,  new DepthPageTransformer());
+//        mViewPager.setPageTransformer(true,  new ZoomOutPageTransformer());
     }
 
     private void initDots() {
