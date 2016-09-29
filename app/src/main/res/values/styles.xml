@@ -1,0 +1,25 @@
+<resources>
+
+    <style name="BaseTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+
+        <!--没有标题-->
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <!--没有ActionBar-->
+        <item name="android:windowActionBar">false</item>
+        <!--全屏-->
+        <item name="android:windowFullscreen">true</item>
+
+
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="BaseTheme">
+
+    </style>
+
+</resources>
