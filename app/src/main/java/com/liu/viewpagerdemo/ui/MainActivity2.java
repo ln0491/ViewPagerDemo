@@ -2,6 +2,7 @@ package com.liu.viewpagerdemo.ui;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
@@ -14,11 +15,12 @@ import com.liu.viewpagerdemo.R;
 import com.liu.viewpagerdemo.adapter.MainAutoViewpagerAdapter;
 import com.liu.viewpagerdemo.view.DepthPageTransformer;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity2 extends AppCompatActivity {
 
     private ViewPager mAutoViewPager;
 
@@ -32,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
     //当前索引
     private int mCurrPageIndex;
 
-    private Handler mHandler;
-    private AutoScrollTask mAutoScrollTask;
+    private MyHandler mHandler;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void initView() {
-        mHandler = new Handler();
+        mHandler = new MyHandler(this);
         mAutoViewPager = (ViewPager) findViewById(R.id.viewPagerAuto);
         mDotsLayout = (LinearLayout) findViewById(R.id.dotsLayout);
 
@@ -65,12 +67,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     private void initViewPager() {
-        mMainAutoViewpagerAdapter = new MainAutoViewpagerAdapter(this,mDatas);
+        mMainAutoViewpagerAdapter = new MainAutoViewpagerAdapter(this, mDatas);
 
         mAutoViewPager.setAdapter(mMainAutoViewpagerAdapter);
-        mAutoViewPager.setPageTransformer(true,new DepthPageTransformer());
+        mAutoViewPager.setPageTransformer(true, new DepthPageTransformer());
 
     }
 
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         mDotParams.rightMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics());
 
         //当前的位置放大1000倍，
-        mCurrPageIndex = mDatas.size()*1000;
+        mCurrPageIndex = mDatas.size() * 1000;
 
 
         for(int i = 0; i < mDatas.size(); i++) {
@@ -91,11 +92,8 @@ public class MainActivity extends AppCompatActivity {
             imageView.setSelected(false);
 
 
-
-
-
             //添加到容器
-            mDotsLayout.addView(imageView,mDotParams);
+            mDotsLayout.addView(imageView, mDotParams);
 
             dots.add(imageView);
 
@@ -110,11 +108,9 @@ public class MainActivity extends AppCompatActivity {
     private void initListener() {
 
         initViewPagerListener();
-        initTask();
+
         initViewPagerTouchEvent();
     }
-
-
 
 
     private void initViewPagerListener() {
@@ -128,9 +124,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
 
-                dots.get(mCurrPageIndex %mDatas.size()).setSelected(false);
-                mCurrPageIndex =position;
-                dots.get(mCurrPageIndex %mDatas.size()).setSelected(true);
+                dots.get(mCurrPageIndex % mDatas.size()).setSelected(false);
+                mCurrPageIndex = position;
+                dots.get(mCurrPageIndex % mDatas.size()).setSelected(true);
 
             }
 
@@ -141,13 +137,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-    private void initTask() {
 
-        mAutoScrollTask = new AutoScrollTask();
-        mAutoScrollTask.start();
-
-
-    }
 
     private void initViewPagerTouchEvent() {
 
@@ -156,11 +146,11 @@ public class MainActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
 
 
-                switch(event.getAction()){
+                switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         //按下时--停止
-                        mAutoScrollTask.stop();
 
+                        stopScroll();
                         break;
 
                     case MotionEvent.ACTION_MOVE:
@@ -168,10 +158,10 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case MotionEvent.ACTION_UP:
                         //抬起时-开始
-                        mAutoScrollTask.start();
+                        startAutoScroll();
                         break;
                     case MotionEvent.ACTION_CANCEL:
-                        mAutoScrollTask.stop();
+                        startAutoScroll();
                         break;
                     default:
                         break;
@@ -184,48 +174,77 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     /**
-     * 自动滚动任务
+     * 静态内部类
+     * 防止内在泄漏
      */
-    private class AutoScrollTask implements Runnable{
+    private static class MyHandler extends Handler {
 
 
+        WeakReference<MainActivity2> mWeakReference;
 
-        //开始任务
-        public void start(){
-
-            //先移除
-         stop();
-            //再开始
-            mHandler.postDelayed(this,5000);
+        public MyHandler(MainActivity2 activity2) {
+            mWeakReference = new WeakReference<MainActivity2>(activity2);
         }
 
         @Override
-        public void run() {
+        public void handleMessage(Message msg) {
+            //super.handleMessage(msg);
+            if(msg.what != 1) {
+                return;
+            }
 
-            // 完成viewpager的切换
-            int currentItem = mAutoViewPager.getCurrentItem();
-            //判断是不是最后一个
-            if(currentItem==mAutoViewPager.getAdapter().getCount()-1){
-                currentItem=0;
-            }else {
+            MainActivity2 mainActivity2 = mWeakReference.get();
+
+
+            int currentItem = mainActivity2.mAutoViewPager.getCurrentItem();
+
+            if(currentItem == mainActivity2.mAutoViewPager.getAdapter().getCount() - 1) {
+                currentItem = 0;
+            } else {
                 currentItem++;
             }
-            //设置当前要显示的
-            //mAutoViewPager.setCurrentItem(currentItem,true);
-            mAutoViewPager.setCurrentItem(currentItem);
 
-            start();
-        }
+            mainActivity2.mAutoViewPager.setCurrentItem(currentItem);
 
-        /**
-         * 停止任务
-         */
-        public void stop(){
+            //循环发送
+            Message msg2 = Message.obtain();
+            msg2.what = 1;
+            sendMessageDelayed(msg2, 5000);
 
-            //停止任务 不滚动
-            mHandler.removeCallbacks(this);
         }
     }
 
+    /**
+     * 开始播放
+     */
+    public void startAutoScroll() {
+        Message msg = Message.obtain();
+        msg.what = 1;
+        mHandler.sendMessageDelayed(msg, 5000);
+    }
+
+    /**
+     * 停止播放
+     */
+    public void stopScroll() {
+        // 清除所有消息 handleMessage就不能执行
+        mHandler.removeCallbacksAndMessages(null);//
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //可见时就循环播放
+        startAutoScroll();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //不可见时就停止播放
+        stopScroll();
+    }
 }

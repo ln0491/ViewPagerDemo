@@ -1,4 +1,4 @@
-package com.liu.viewpagerdemo;
+package com.liu.viewpagerdemo.adapter;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
@@ -69,6 +69,7 @@ public class WelcomeViewpagerAdapter extends PagerAdapter {
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
        // super.destroyItem(container, position, object);
+
 
         container.removeView((View) object);
     }
