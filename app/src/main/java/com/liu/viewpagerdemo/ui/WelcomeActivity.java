@@ -177,6 +177,7 @@ public class WelcomeActivity extends AppCompatActivity {
                         if(mViewPager.getCurrentItem() == mWelcomeViewpagerAdapter.getCount() - 1 && !flag) {
                             Intent localIntent = new Intent();
 
+                           // localIntent.setClass(WelcomeActivity.this, MainActivity.class);
                             localIntent.setClass(WelcomeActivity.this, MainActivity2.class);
                             startActivity(localIntent);
                             // overridePendingTransition(0, 0);
