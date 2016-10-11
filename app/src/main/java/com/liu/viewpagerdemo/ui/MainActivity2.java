@@ -7,6 +7,7 @@ import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -272,7 +273,7 @@ public class MainActivity2 extends AppCompatActivity {
     /**
      * 按二次返回键退出应用
      */
-    @Override
+  /*  @Override
     public void onBackPressed() {
         long currentTime = System.currentTimeMillis();
 
@@ -284,17 +285,32 @@ public class MainActivity2 extends AppCompatActivity {
         }
 
 
-    }
+    }*/
 
 
-  /*  @Override
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         if(keyCode==KeyEvent.KEYCODE_BACK){
             //禁用返回键
+            exit();
             return false;
         }
 
         return super.onKeyDown(keyCode, event);
-    }*/
+    }
+
+    private void exit() {
+
+
+        long currentTime = System.currentTimeMillis();
+
+        if(currentTime-lastTime<2*1000){
+            super.onBackPressed();
+        }else {
+            Toast.makeText(this, "再按一次退出应用", Toast.LENGTH_SHORT).show();
+            lastTime=currentTime;
+        }
+
+    }
 }
