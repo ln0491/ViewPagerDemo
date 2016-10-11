@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_tab_vf"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context="com.liu.viewpagerdemo.ui.TabVFActivity">
+
+
+
+    <!--
+
+    tabBackground 背景色
+    tabIndicatorColor：指示器颜色，横线
+    tabIndicatorHeight 指示器高度
+    tabTextColor 指示器，文字 没有选择时正常的颜色
+    tabSelectedTextColor  指示器，文字 选择时颜色
+    tabPadding  指示器 内边距
+      app:tabMode="scrollable" 模式，有scrollable和fixed两种，分别表示可以滑动和固定的意思
+    -->
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tablayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabBackground="@color/colorPrimaryDark"
+        app:tabIndicatorColor="#ff0000"
+        app:tabIndicatorHeight="2dp"
+        app:tabTextColor="@color/colorAccent"
+        app:tabSelectedTextColor="#FFFFFF"
+        app:tabMode="scrollable"
+        app:tabPadding="5dp">
+
+    </android.support.design.widget.TabLayout>
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v4.view.ViewPager>
+
+
+</LinearLayout>

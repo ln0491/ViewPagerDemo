@@ -1,5 +1,6 @@
 package com.liu.viewpagerdemo.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -35,6 +37,7 @@ public class MainActivity2 extends AppCompatActivity {
     private int mCurrPageIndex;
 
     private MyHandler mHandler;
+    private Button mBtnTabViewpagerFragment;
 
 
     @Override
@@ -51,6 +54,8 @@ public class MainActivity2 extends AppCompatActivity {
         mHandler = new MyHandler(this);
         mAutoViewPager = (ViewPager) findViewById(R.id.viewPagerAuto);
         mDotsLayout = (LinearLayout) findViewById(R.id.dotsLayout);
+
+        mBtnTabViewpagerFragment = (Button) findViewById(R.id.btnTabViewpagerFragment);
 
     }
 
@@ -110,6 +115,15 @@ public class MainActivity2 extends AppCompatActivity {
         initViewPagerListener();
 
         initViewPagerTouchEvent();
+        mBtnTabViewpagerFragment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(MainActivity2.this,TabVFActivity.class);
+                startActivity(intent);
+
+            }
+        });
     }
 
 
