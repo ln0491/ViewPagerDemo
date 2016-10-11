@@ -271,6 +271,7 @@ public class MainActivity2 extends AppCompatActivity {
     private  long lastTime ;
 
     /**
+     * 第一种
      * 按二次返回键退出应用
      */
   /*  @Override
@@ -300,6 +301,9 @@ public class MainActivity2 extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    /**
+     * 第二种
+     */
     private void exit() {
 
 
