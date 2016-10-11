@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.liu.viewpagerdemo.R;
 import com.liu.viewpagerdemo.adapter.MainAutoViewpagerAdapter;
@@ -261,4 +262,39 @@ public class MainActivity2 extends AppCompatActivity {
         //不可见时就停止播放
         stopScroll();
     }
+
+
+    /**
+     * 最后按下的时间
+     */
+    private  long lastTime ;
+
+    /**
+     * 按二次返回键退出应用
+     */
+    @Override
+    public void onBackPressed() {
+        long currentTime = System.currentTimeMillis();
+
+        if(currentTime-lastTime<2*1000){
+            super.onBackPressed();
+        }else {
+            Toast.makeText(this, "再按一次退出应用", Toast.LENGTH_SHORT).show();
+            lastTime=currentTime;
+        }
+
+
+    }
+
+
+  /*  @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if(keyCode==KeyEvent.KEYCODE_BACK){
+            //禁用返回键
+            return false;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }*/
 }

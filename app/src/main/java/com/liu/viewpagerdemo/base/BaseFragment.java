@@ -46,7 +46,7 @@ public abstract class BaseFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 
         super.onActivityCreated(savedInstanceState);
-        //这里说见 可见
+        //这里 初始化view的各控件 数据
         isPrepared = true;
         lazyLoad();
 
